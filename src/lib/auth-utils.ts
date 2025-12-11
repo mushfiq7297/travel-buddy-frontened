@@ -51,7 +51,7 @@ export const getRouteOwner = (
 };
 
 export const getDefaultDashboardRoute = (role: UserRole): string => {
-  if (role === "ADMIN") return "/admin";
+  if (role === "ADMIN") return "/dashboard";
   if (role === "USER") return "/";
   return "/";
 };
