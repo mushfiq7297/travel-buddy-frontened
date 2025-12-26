@@ -9,7 +9,7 @@ import UserMenu from "./UserMenu";
 
 const PublicNavbar = async () => {
   const navItems = [
-    { href: "/explore", label: "Explore Travelers" },
+    { href: "/", label: "Explore Travelers" },
     { href: "/find-buddy", label: "Find Travel Buddy" },
   ];
 

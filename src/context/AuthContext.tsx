@@ -1,13 +1,18 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 
 export type AuthUser = {
-  id: string;
+  _id: string;
   email: string;
   role: string;
   name?: string | null;
-  avatar?: string | null;
 } | null;
 
 type AuthContextType = {
@@ -29,16 +34,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function loadUser() {
       try {
-        const res = await fetch("/api/auth/me", { cache: "no-store" });
-        const data = await res.json();
-        setUser(data?.user || null);
-      } catch (error) {
-        console.error("Auth load error:", error);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
+          credentials: "include",
+        });
+
+        const json = await res.json();
+
+        if (json?.data?._id) {
+          setUser({
+            _id: json.data?._id,
+            email: json.data?.email,
+            role: json.data?.role,
+            name: json.data?.name,
+          });
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
         setUser(null);
       } finally {
         setLoading(false);
       }
     }
+
     loadUser();
   }, []);
 
@@ -48,6 +66,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     </AuthContext.Provider>
   );
 }
-
 
 export const useAuth = () => useContext(AuthContext);
